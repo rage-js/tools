@@ -1,0 +1,33 @@
+{
+  "name": "@rage-js/tools",
+  "version": "0.0.1",
+  "description": "Tool kit for managing local data created by RAGE.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rage-js/tools.git"
+  },
+  "keywords": [
+    "rage",
+    "rage-js",
+    "rage-tools",
+    "rage-tool"
+  ],
+  "author": "Maghish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rage-js/tools/issues"
+  },
+  "homepage": "https://github.com/rage-js/tools#readme",
+  "devDependencies": {
+    "@changesets/cli": "^2.27.5",
+    "@types/node": "^20.14.2",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
+  }
+}
