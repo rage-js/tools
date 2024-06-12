@@ -1,6 +1,6 @@
 {
   "name": "@rage-js/tools",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Tool kit for managing local data created by RAGE.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -29,5 +29,8 @@
     "ts-node": "^10.9.2",
     "tsup": "^8.1.0",
     "typescript": "^5.4.5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
