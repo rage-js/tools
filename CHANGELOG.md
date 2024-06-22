@@ -1,5 +1,17 @@
 # @rage-js/tools
 
+## 0.0.5
+
+### Patch Changes
+
+- Added images and updated README.md
+
+## 0.0.4
+
+### Patch Changes
+
+- Modified TooKit - MongoDBToolKit
+
 ## 0.0.3
 
 ### Patch Changes
