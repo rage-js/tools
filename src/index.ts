@@ -5,17 +5,17 @@ import path from "path";
 /**
  * The tool kit class consisting all the tool functions
  */
-class ToolKit {
+class MongoDBToolKit {
   private configPath: string;
 
   // @ts-ignore
   private localDatabasePath: string;
   // @ts-ignore
-  private databaseType: "MongoDB";
-
-  private databaseSecret?: string;
-  private dbs?: string[];
-  private excludeCollections?: string[];
+  private databaseSecret: string;
+  // @ts-ignore
+  private dbs: string[];
+  // @ts-ignore
+  private excludeCollections: string[];
 
   private applicationSetup: boolean;
   private logger: boolean;
@@ -38,16 +38,30 @@ class ToolKit {
     try {
       const data = await readConfigFile(this.configPath, this.logger);
       if (data !== false) {
-        this.databaseType = data.databaseType;
-        this.databaseSecret = data.databaseSpecificSettings.secretKey;
-        this.localDatabasePath = path.join(process.cwd(), data.outDir);
-        this.dbs = data.databaseSpecificSettings.dbs;
-        this.excludeCollections =
-          data.databaseSpecificSettings.excludeCollections;
+        if (
+          data.databaseType === "MongoDB" &&
+          data.databaseSpecificSettings.secretKey &&
+          data.databaseSpecificSettings.dbs &&
+          data.databaseSpecificSettings.excludeCollections
+        ) {
+          this.databaseSecret = data.databaseSpecificSettings.secretKey;
+          this.localDatabasePath = path.join(process.cwd(), data.outDir);
+          this.dbs = data.databaseSpecificSettings.dbs;
+          this.excludeCollections =
+            data.databaseSpecificSettings.excludeCollections;
 
-        this.applicationSetup = true;
+          this.applicationSetup = true;
 
-        return true;
+          return true;
+        } else {
+          formatLog(
+            "The given configuration says that the database is not MongoDB, this class only supports MongoDB databases.",
+            "error",
+            this.logger
+          );
+
+          return false;
+        }
       }
     } catch (error: any) {
       formatLog(
@@ -61,4 +75,4 @@ class ToolKit {
   }
 }
 
-export { ToolKit };
+export { MongoDBToolKit };
