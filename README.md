@@ -1,7 +1,7 @@
 <div align='center'>
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./img_for_docs/RAGE-tools.png">
-    <img src="./img_for_docs/RAGE-tools.png" alt="RAGE">
+    <img src="./img_for_docs/RAGE-tools-dark.png" alt="RAGE">
   </picture>
 </div>
 
