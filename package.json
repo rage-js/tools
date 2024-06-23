@@ -34,6 +34,7 @@
     "access": "public"
   },
   "dependencies": {
-    "chalk": "^4.0.0"
+    "chalk": "^4.0.0",
+    "mongodb": "^6.7.0"
   }
 }

@@ -1,6 +1,7 @@
 import formatLog from "./util/formatLog";
 import readConfigFile from "./util/readConfigFile";
-import path from "path";
+import fs from "fs/promises";
+import path, { format } from "path";
 
 /**
  * The tool kit class consisting all the tool functions
@@ -66,6 +67,59 @@ class MongoDBToolKit {
     } catch (error: any) {
       formatLog(
         "Unexpected error occurred, when trying to setup the configuration",
+        "error",
+        this.logger
+      );
+
+      return false;
+    }
+  }
+
+  /**
+   * Creates a new MongoDB collection.
+   * @param {string} collectionName
+   * @param {string} databaseName
+   * @returns {boolean}
+   */
+  async createCollection(databaseName: string, collectionName: string) {
+    try {
+      if (this.dbs.includes(databaseName)) {
+        const fullPath = path.join(
+          this.localDatabasePath,
+          databaseName,
+          `${collectionName}.json`
+        );
+
+        try {
+          await fs.readFile(fullPath, "utf-8");
+          formatLog(
+            "Collection already exists! Please rename the collection.",
+            "error",
+            this.logger
+          );
+          return false;
+        } catch (error: any) {
+          if (error.code === "ENOENT") {
+            await fs.writeFile(fullPath, JSON.stringify([]), "utf-8");
+            return true;
+          }
+        }
+      } else {
+        formatLog(
+          `Database with the name ${databaseName} doesn't exist, please provide an existing one.`,
+          "error",
+          this.logger
+        );
+        formatLog(
+          "You can only create databases via MongoDB Atlas only as this tool kit doesn't support that feature yet.",
+          "warning",
+          this.logger
+        );
+        return false;
+      }
+    } catch (error: any) {
+      formatLog(
+        "Unexpected error occurred, when trying to create collection",
         "error",
         this.logger
       );
