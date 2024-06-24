@@ -1,3 +1,4 @@
+import MongoDBCollection from "./classes/mongodb/MongoDBCollection";
 import formatLog from "./util/formatLog";
 import readConfigFile from "./util/readConfigFile";
 import fs from "fs/promises";
@@ -127,6 +128,67 @@ class MongoDBToolKit {
       return false;
     }
   }
+
+  /**
+   * Finds the collection and returns it as MongoDBCollection object class.
+   * @param {string} databaseName
+   * @param {string} collectionName
+   * @returns {MongoDBCollection | false}
+   */
+  async findCollection(databaseName: string, collectionName: string) {
+    try {
+      if (this.dbs.includes(databaseName)) {
+        const fullPath = path.join(
+          this.localDatabasePath,
+          databaseName,
+          `${collectionName}.json`
+        );
+        try {
+          let data: string | Object[] = await fs.readFile(fullPath, "utf-8");
+          if (data === "[]") {
+            data = [];
+          } else {
+            data = JSON.parse(data);
+          }
+
+          // @ts-ignore
+          return new MongoDBCollection(collectionName, data);
+        } catch (error: any) {
+          if (error.code === "ENOENT") {
+            formatLog("Collection doesn't exist.", "error", this.logger);
+            return false;
+          } else {
+            formatLog(
+              "Unexpected error occurred, when trying to read the collection.",
+              "error",
+              this.logger
+            );
+            return false;
+          }
+        }
+      } else {
+        formatLog(
+          `Database with the name ${databaseName} doesn't exist, please provide an existing one.`,
+          "error",
+          this.logger
+        );
+        formatLog(
+          "You can only create databases via MongoDB Atlas only as this tool kit doesn't support that feature yet.",
+          "warning",
+          this.logger
+        );
+        return false;
+      }
+    } catch (error: any) {
+      formatLog(
+        "Unexpected error occurred, when trying to find collection",
+        "error",
+        this.logger
+      );
+
+      return false;
+    }
+  }
 }
 
-export { MongoDBToolKit };
+export { MongoDBToolKit, MongoDBCollection };
