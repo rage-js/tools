@@ -1,8 +1,8 @@
-import MongoDBCollection from "./classes/mongodb/MongoDBCollection";
+import MongoDBCollection from "./classes/MongoDB/MongoDBCollection";
 import formatLog from "./util/formatLog";
 import readConfigFile from "./util/readConfigFile";
 import fs from "fs/promises";
-import path, { format } from "path";
+import path from "path";
 
 /**
  * The tool kit class consisting all the tool functions
