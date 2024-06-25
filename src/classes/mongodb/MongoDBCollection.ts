@@ -32,10 +32,12 @@ class MongoDBCollection {
 
   async createDocument(arg: { [key: string]: any }) {
     try {
-      for (let key in arg) {
-        if (arg.hasOwnProperty(key)) {
-          let schema = this.schema.getSchema();
-          if (schema[key] && typeof arg[key] === schema[key]) {
+      let schema = this.schema.getSchema();
+
+      // Check if the given fields are valid and exists on the schema
+      for (let key in schema) {
+        if (arg.hasOwnProperty(key) && schema.hasOwnProperty(key)) {
+          if (typeof arg[key] === schema[key]) {
           } else {
             formatLog(
               `Type ${typeof arg[key]} is not assignable to ${key} whose type ${
@@ -44,9 +46,33 @@ class MongoDBCollection {
               "error",
               this.logger
             );
+
             return false;
           }
+        } else {
+          formatLog(
+            `${key} is missing, please provide valid fields and try again`,
+            "error",
+            this.logger
+          );
+
+          return false;
         }
+      }
+
+      // Check if any of the given fields doesn't exist in the schema
+      for (let key in arg) {
+        if (arg.hasOwnProperty(key) && schema.hasOwnProperty(key)) {
+          continue;
+        }
+
+        formatLog(
+          `${key} doesn't exist on the schema, please provide valid fields and try again`,
+          "error",
+          this.logger
+        );
+
+        return false;
       }
 
       const fullPath = path.join(
