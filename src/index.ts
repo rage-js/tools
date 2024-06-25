@@ -154,12 +154,14 @@ class MongoDBToolKit {
 
           return new MongoDBCollection(
             collectionName,
+            databaseName,
             // @ts-ignore
             data,
             new MongoDBSchema({
               name: String,
               age: Number,
-            })
+            }),
+            this.localDatabasePath
           );
         } catch (error: any) {
           if (error.code === "ENOENT") {
