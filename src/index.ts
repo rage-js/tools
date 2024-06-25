@@ -1,5 +1,6 @@
 import MongoDBCollection from "./classes/MongoDB/MongoDBCollection";
 import MongoDBSchema from "./classes/MongoDB/MongoDBSchema";
+import getSchema from "./util/MongoDB/getSchema";
 import formatLog from "./util/formatLog";
 import readConfigFile from "./util/readConfigFile";
 import fs from "fs/promises";
@@ -152,15 +153,19 @@ class MongoDBToolKit {
             data = JSON.parse(data);
           }
 
+          const schema = await getSchema(
+            this.localDatabasePath,
+            databaseName,
+            collectionName,
+            this.logger
+          );
+
           return new MongoDBCollection(
             collectionName,
             databaseName,
             // @ts-ignore
             data,
-            new MongoDBSchema({
-              name: String,
-              age: Number,
-            }),
+            schema,
             this.localDatabasePath
           );
         } catch (error: any) {
@@ -201,4 +206,4 @@ class MongoDBToolKit {
   }
 }
 
-export { MongoDBToolKit, MongoDBCollection };
+export { MongoDBToolKit, MongoDBCollection, MongoDBSchema };
