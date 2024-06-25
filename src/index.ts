@@ -1,4 +1,5 @@
 import MongoDBCollection from "./classes/MongoDB/MongoDBCollection";
+import MongoDBSchema from "./classes/MongoDB/MongoDBSchema";
 import formatLog from "./util/formatLog";
 import readConfigFile from "./util/readConfigFile";
 import fs from "fs/promises";
@@ -151,8 +152,15 @@ class MongoDBToolKit {
             data = JSON.parse(data);
           }
 
-          // @ts-ignore
-          return new MongoDBCollection(collectionName, data);
+          return new MongoDBCollection(
+            collectionName,
+            // @ts-ignore
+            data,
+            new MongoDBSchema({
+              name: String,
+              age: Number,
+            })
+          );
         } catch (error: any) {
           if (error.code === "ENOENT") {
             formatLog("Collection doesn't exist.", "error", this.logger);

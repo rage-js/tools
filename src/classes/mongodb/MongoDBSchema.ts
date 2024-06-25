@@ -2,7 +2,7 @@
  * A type class to define a collection's schema.
  */
 class MongoDBSchema {
-  private schema: { [key: string]: any };
+  private schema: { [key: string]: string };
 
   constructor(schema: { [key: string]: any }) {
     for (let key in schema) {
@@ -28,8 +28,12 @@ class MongoDBSchema {
     this.schema = schema;
   }
 
-  logSchmea() {
-    console.log(this.schema);
+  /**
+   * Returns the schema.
+   * @returns {{ [key: string]: any }}
+   */
+  getSchema() {
+    return this.schema;
   }
 }
 

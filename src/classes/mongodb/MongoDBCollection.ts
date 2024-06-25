@@ -4,14 +4,30 @@ import MongoDBSchema from "./MongoDBSchema";
  * A type class that allows the user to perform collection related operations like finding, writing and deleting documents.
  */
 class MongoDBCollection {
-  collectionName: string;
-  documents: Object[];
+  public collectionName: string;
+  public documents: Object[];
+  private schema: MongoDBSchema;
 
-  constructor(collectionName: string, documents: Object[]) {
+  constructor(
+    collectionName: string,
+    documents: Object[],
+    schema: MongoDBSchema
+  ) {
     this.collectionName = collectionName;
     this.documents = documents;
-    const res = new MongoDBSchema({ name: String, age: Number });
-    res.logSchmea();
+    this.schema = schema;
+  }
+
+  async create(arg: { [key: string]: any }) {
+    for (let key in arg) {
+      if (arg.hasOwnProperty(key)) {
+        let value = arg[key];
+        let schema = this.schema.getSchema();
+        if (schema[key] && typeof arg[key] === schema[key]) {
+          console.log(value, "matching!");
+        }
+      }
+    }
   }
 }
 
