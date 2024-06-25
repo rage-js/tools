@@ -1,3 +1,4 @@
+import formatLog from "../../util/formatLog";
 import MongoDBSchema from "./MongoDBSchema";
 
 /**
@@ -7,6 +8,8 @@ class MongoDBCollection {
   public collectionName: string;
   public documents: Object[];
   private schema: MongoDBSchema;
+  // Logger is always meant to be true
+  private logger: true = true;
 
   constructor(
     collectionName: string,
@@ -18,15 +21,33 @@ class MongoDBCollection {
     this.schema = schema;
   }
 
-  async create(arg: { [key: string]: any }) {
-    for (let key in arg) {
-      if (arg.hasOwnProperty(key)) {
-        let value = arg[key];
-        let schema = this.schema.getSchema();
-        if (schema[key] && typeof arg[key] === schema[key]) {
-          console.log(value, "matching!");
+  async createDocument(arg: { [key: string]: any }) {
+    try {
+      for (let key in arg) {
+        if (arg.hasOwnProperty(key)) {
+          let schema = this.schema.getSchema();
+          if (schema[key] && typeof arg[key] === schema[key]) {
+          } else {
+            formatLog(
+              `Type ${typeof arg[key]} is not assignable to ${key} whose type ${
+                schema[key]
+              }`,
+              "error",
+              this.logger
+            );
+            return false;
+          }
         }
       }
+
+      console.log("All are matching!");
+    } catch (error) {
+      formatLog(
+        "Unexpected error occurred, while creating document",
+        "error",
+        this.logger
+      );
+      return false;
     }
   }
 }
