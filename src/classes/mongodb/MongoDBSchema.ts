@@ -32,7 +32,7 @@ class MongoDBSchema {
    * Returns the schema.
    * @returns {{ [key: string]: any }}
    */
-  getSchema() {
+  getSchema(): { [key: string]: any } {
     return this.schema;
   }
 }

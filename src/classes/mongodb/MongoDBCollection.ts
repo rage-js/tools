@@ -30,7 +30,12 @@ class MongoDBCollection {
     this.localDatabasePath = localDatabasePath;
   }
 
-  async createDocument(arg: { [key: string]: any }) {
+  /**
+   * Creates a new document inside this collection.
+   * @param {{[key: string]: any}} arg
+   * @returns {Promise<boolean>}
+   */
+  async createDocument(arg: { [key: string]: any }): Promise<boolean> {
     try {
       let schema = this.schema.getSchema();
 

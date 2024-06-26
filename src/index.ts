@@ -36,9 +36,9 @@ class MongoDBToolKit {
 
   /**
    * Function that will setup the application configuration
-   * @returns {boolean}
+   * @returns {Promise<boolean>}
    */
-  async setup() {
+  async setup(): Promise<boolean> {
     try {
       const data = await readConfigFile(this.configPath, this.logger);
       if (data !== false) {
@@ -66,6 +66,8 @@ class MongoDBToolKit {
 
           return false;
         }
+      } else {
+        return false;
       }
     } catch (error: any) {
       formatLog(
@@ -82,9 +84,12 @@ class MongoDBToolKit {
    * Creates a new MongoDB collection.
    * @param {string} collectionName
    * @param {string} databaseName
-   * @returns {boolean}
+   * @returns {Promise<boolean>}
    */
-  async createCollection(databaseName: string, collectionName: string) {
+  async createCollection(
+    databaseName: string,
+    collectionName: string
+  ): Promise<boolean> {
     try {
       if (this.dbs.includes(databaseName)) {
         const fullPath = path.join(
@@ -105,6 +110,13 @@ class MongoDBToolKit {
           if (error.code === "ENOENT") {
             await fs.writeFile(fullPath, JSON.stringify([]), "utf-8");
             return true;
+          } else {
+            formatLog(
+              "Unexpected error occurred, while trying to create the collection",
+              "error",
+              this.logger
+            );
+            return false;
           }
         }
       } else {
@@ -135,9 +147,12 @@ class MongoDBToolKit {
    * Finds the collection and returns it as MongoDBCollection object class.
    * @param {string} databaseName
    * @param {string} collectionName
-   * @returns {MongoDBCollection | false}
+   * @returns {Promise<import("./classes/MongoDB/MongoDBCollection") | false>}
    */
-  async findCollection(databaseName: string, collectionName: string) {
+  async findCollection(
+    databaseName: string,
+    collectionName: string
+  ): Promise<MongoDBCollection | false> {
     try {
       if (this.dbs.includes(databaseName)) {
         const fullPath = path.join(
