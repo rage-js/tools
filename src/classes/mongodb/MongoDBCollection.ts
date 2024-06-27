@@ -170,21 +170,30 @@ class MongoDBCollection {
         return [];
       }
 
+      let returnDocuments: any[] = [];
+
       allDocuments.forEach((document) => {
         const allFields = Object.keys(document);
         const filterFields = Object.keys(filter);
+        let matchingStatus = false;
+
         filterFields.forEach((key) => {
           if (allFields.indexOf(key) !== -1) {
             if (filter[key].toString() === document[key].toString()) {
-              // Matching
+              matchingStatus = true;
+            } else {
+              matchingStatus = false;
             }
+          } else {
+            matchingStatus = false;
           }
         });
+
+        returnDocuments.push(document);
       });
 
       // Return the document
-
-      return [];
+      return returnDocuments;
     } catch (error: any) {
       formatLog(
         "Unexpected error occurred, while trying to find document",
