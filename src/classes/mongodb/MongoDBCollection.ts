@@ -3,6 +3,7 @@ import MongoDBSchema from "./MongoDBSchema";
 import path from "path";
 import fsS from "fs";
 import * as fsP from "fs/promises";
+import getAllDocuments from "../../util/MongoDB/getAllDocuments";
 
 /**
  * A type class that allows the user to perform collection related operations like finding, writing and deleting documents.
@@ -115,6 +116,82 @@ class MongoDBCollection {
         "error",
         this.logger
       );
+      return false;
+    }
+  }
+
+  /**
+   * Finds any existing document and returns it.
+   * @param {{[key: string]: any}}
+   * @returns {Promise<any[] | false>}
+   */
+  async findDocument(filter: { [key: string]: any }): Promise<any[] | false> {
+    try {
+      // Check if any of those fields inside the filter are valid for the collection's schema
+      const schema = this.schema.getSchema();
+
+      for (let key in filter) {
+        if (filter.hasOwnProperty(key) && schema.hasOwnProperty(key)) {
+          if (typeof filter[key] === schema[key]) {
+          } else {
+            formatLog(
+              `Type ${typeof filter[
+                key
+              ]} is not assignable to ${key} whose type ${schema[key]}`,
+              "error",
+              this.logger
+            );
+
+            return false;
+          }
+        } else {
+          formatLog(
+            `${key} doesn't exist on the schema, please provide valid fields and try again`,
+            "error",
+            this.logger
+          );
+
+          return false;
+        }
+      }
+
+      // Find the document
+      const allDocuments = await getAllDocuments(
+        this.localDatabasePath,
+        this.databaseName,
+        this.collectionName,
+        this.logger
+      );
+      if (!allDocuments) {
+        return false;
+      }
+
+      if (allDocuments.length === 0) {
+        return [];
+      }
+
+      allDocuments.forEach((document) => {
+        const allFields = Object.keys(document);
+        const filterFields = Object.keys(filter);
+        filterFields.forEach((key) => {
+          if (allFields.indexOf(key) !== -1) {
+            if (filter[key].toString() === document[key].toString()) {
+              // Matching
+            }
+          }
+        });
+      });
+
+      // Return the document
+
+      return [];
+    } catch (error: any) {
+      formatLog(
+        "Unexpected error occurred, while trying to find document",
+        "error",
+        this.logger
+      );
+
       return false;
     }
   }
