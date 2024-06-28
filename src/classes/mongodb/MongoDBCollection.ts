@@ -189,7 +189,9 @@ class MongoDBCollection {
           }
         });
 
-        returnDocuments.push(document);
+        if (matchingStatus) {
+          returnDocuments.push(document);
+        }
       });
 
       // Return the document
