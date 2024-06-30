@@ -4,13 +4,13 @@ import getCurrentTime from "./getCurrentTime";
 /**
  * Formats the given message and logs it in the console.
  * @param {string} message
- * @param {"config" | "fetch" | "push" | "warning" | "error"} type
+ * @param {"config" | "warning" | "error"} type
  * @param {boolean} logger
  * @returns
  */
 function formatLog(
   message: string,
-  type: "config" | "fetch" | "push" | "warning" | "error",
+  type: "config" | "warning" | "error",
   logger: boolean
 ) {
   if (logger) {
@@ -19,12 +19,6 @@ function formatLog(
 
       if (type === "config") {
         flag = chalk.bold(chalk.white("(CONFIG)"));
-      }
-      if (type === "fetch") {
-        flag = chalk.bold(chalk.greenBright("(FETCH)"));
-      }
-      if (type === "push") {
-        flag = chalk.bold(chalk.green("(PUSH)"));
       }
       if (type === "warning") {
         flag = chalk.bold(chalk.yellow("(WARNING)"));

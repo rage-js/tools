@@ -1,6 +1,6 @@
 {
   "name": "@rage-js/tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tool kit for managing local data created by RAGE.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

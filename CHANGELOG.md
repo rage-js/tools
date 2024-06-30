@@ -1,5 +1,11 @@
 # @rage-js/tools
 
+## 0.1.1
+
+### Patch Changes
+
+- - Bug fix: Removed logger flags **PUSH**, **FETCH**
+
 ## 0.1.0
 
 ### Minor Changes
