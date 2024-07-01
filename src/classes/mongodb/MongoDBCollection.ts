@@ -127,7 +127,7 @@ class MongoDBCollection {
    */
   async findDocument(filter: { [key: string]: any }): Promise<any[] | false> {
     try {
-      // Check if any of those fields inside the filter are valid for the collection's schema
+      // Schema Validator
       const schema = this.schema.getSchema();
 
       for (let key in filter) {
@@ -203,6 +203,118 @@ class MongoDBCollection {
         this.logger
       );
 
+      return false;
+    }
+  }
+
+  /**
+   * Deletes existing documents passed as an argument.
+   * @param {{[key: string]: any}} filter
+   * @param {boolean} multiple
+   * @returns {Promises<any>}
+   */
+  async deleteDocument(
+    filter: { [key: string]: any },
+    multiple: boolean
+  ): Promise<boolean> {
+    try {
+      // Schema Validator
+      const schema = this.schema.getSchema();
+
+      for (let key in filter) {
+        if (filter.hasOwnProperty(key) && schema.hasOwnProperty(key)) {
+          if (typeof filter[key] === schema[key]) {
+          } else {
+            formatLog(
+              `Type ${typeof filter[
+                key
+              ]} is not assignable to ${key} whose type ${schema[key]}`,
+              "error",
+              this.logger
+            );
+
+            return false;
+          }
+        } else {
+          formatLog(
+            `${key} doesn't exist on the schema, please provide valid fields and try again`,
+            "error",
+            this.logger
+          );
+
+          return false;
+        }
+      }
+
+      // Find the document
+      const allDocuments = await getAllDocuments(
+        this.localDatabasePath,
+        this.databaseName,
+        this.collectionName,
+        this.logger
+      );
+      if (!allDocuments) {
+        return false;
+      }
+
+      if (allDocuments.length === 0) {
+        return false;
+      }
+
+      let documentIndexs: number[] = [];
+
+      allDocuments.forEach((document) => {
+        const allFields = Object.keys(document);
+        const filterFields = Object.keys(filter);
+        let matchingStatus = false;
+
+        filterFields.forEach((key) => {
+          if (allFields.indexOf(key) !== -1) {
+            if (filter[key].toString() === document[key].toString()) {
+              matchingStatus = true;
+            } else {
+              matchingStatus = false;
+            }
+          } else {
+            matchingStatus = false;
+          }
+        });
+
+        if (matchingStatus) {
+          documentIndexs.push(allDocuments.indexOf(document));
+        }
+      });
+
+      if (documentIndexs.length === 0) {
+        formatLog("Couldn't find any documents", "error", this.logger);
+        return false;
+      }
+
+      // Check if the 'multiple' argument is true
+      if (multiple) {
+        return false;
+      } else {
+        // Delete the first document found on the documents array
+        const fullPath = path.join(
+          this.localDatabasePath,
+          this.databaseName,
+          `${this.collectionName}.json`
+        );
+        const fileContent: string | any[] = await fsP.readFile(
+          fullPath,
+          "utf-8"
+        );
+        let data = JSON.parse(fileContent);
+        data.splice(documentIndexs[0]!, 1);
+        await fsP.writeFile(fullPath, JSON.stringify(data, null, 2), "utf-8");
+        return true;
+      }
+    } catch (error) {
+      formatLog(
+        "Unexpected error occurred, while trying to delete documents",
+        "error",
+        this.logger
+      );
       return false;
     }
   }
