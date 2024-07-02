@@ -292,7 +292,26 @@ class MongoDBCollection {
 
       // Check if the 'multiple' argument is true
       if (multiple) {
-        return false;
+        const fullPath = path.join(
+          this.localDatabasePath,
+          this.databaseName,
+          `${this.collectionName}.json`
+        );
+        const fileContent: string | any[] = await fsP.readFile(
+          fullPath,
+          "utf-8"
+        );
+        let data = JSON.parse(fileContent);
+
+        //? It would be better if "forEach" is used instead of an actual for loop, but somehow forEach loop doesn't seem to work properly, hence had to go with this method.
+        for (let i = 0; i < documentIndexs.length; i++) {
+          data.splice(i, 1);
+          continue;
+        }
+
+        await fsP.writeFile(fullPath, JSON.stringify(data, null, 2), "utf-8");
+
+        return true;
       } else {
         // Delete the first document found on the documents array
         const fullPath = path.join(
