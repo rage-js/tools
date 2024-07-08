@@ -18,4 +18,4 @@
   }
   ```
 - Feature: Redefined the return type of `getSchema` function from `MongoDBSchmea` class.
-- Feature: `createDocument` from `MongoDBCollection` class is updated with the new schema format.
+- Feature: `createDocument`, `findDocument`, `deleteDocument` from `MongoDBCollection` class is updated with the new schema format.
