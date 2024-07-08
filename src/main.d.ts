@@ -12,4 +12,12 @@ interface configurationType {
   outDir: string;
 }
 
-export { configurationType };
+interface SchemaConfigurationType {
+  [key: string]: {
+    type: string[];
+    required?: boolean = false;
+    default?: any;
+  };
+}
+
+export { configurationType, SchemaConfigurationType };
