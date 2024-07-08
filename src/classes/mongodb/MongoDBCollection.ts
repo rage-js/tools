@@ -4,6 +4,7 @@ import path from "path";
 import fsS from "fs";
 import * as fsP from "fs/promises";
 import getAllDocuments from "../../util/MongoDB/getAllDocuments";
+import { SchemaConfigurationType } from "../../main";
 
 /**
  * A type class that allows the user to perform collection related operations like finding, writing and deleting documents.
@@ -33,7 +34,7 @@ class MongoDBCollection {
 
   /**
    * Creates a new document inside this collection.
-   * @param {{[key: string]: any}} arg
+   * @param {{ [key: string]: any }} arg
    * @returns {Promise<boolean>}
    */
   async createDocument(arg: { [key: string]: any }): Promise<boolean> {
@@ -42,27 +43,33 @@ class MongoDBCollection {
 
       // Check if the given fields are valid and exists on the schema
       for (let key in schema) {
-        if (arg.hasOwnProperty(key) && schema.hasOwnProperty(key)) {
-          if (typeof arg[key] === schema[key]) {
+        if (schema[key]!.required === false && !arg.hasOwnProperty(key)) {
+          if (schema[key]!.default) {
+            arg[key] = schema[key]!.default;
+          }
+        } else {
+          if (arg.hasOwnProperty(key)) {
+            if (schema[key]!.type.includes(typeof arg[key])) {
+            } else {
+              formatLog(
+                `Type ${typeof arg[
+                  key
+                ]} is not assignable to ${key} whose type ${schema[key]}`,
+                "error",
+                this.logger
+              );
+
+              return false;
+            }
           } else {
             formatLog(
-              `Type ${typeof arg[key]} is not assignable to ${key} whose type ${
-                schema[key]
-              }`,
+              `${key} is missing, please provide valid fields and try again`,
               "error",
               this.logger
             );
 
             return false;
           }
-        } else {
-          formatLog(
-            `${key} is missing, please provide valid fields and try again`,
-            "error",
-            this.logger
-          );
-
-          return false;
         }
       }
 
@@ -122,7 +129,7 @@ class MongoDBCollection {
 
   /**
    * Finds any existing document and returns it.
-   * @param {{[key: string]: any}}
+   * @param {{ [key: string]: any }} filter
    * @returns {Promise<any[] | false>}
    */
   async findDocument(filter: { [key: string]: any }): Promise<any[] | false> {
@@ -132,7 +139,7 @@ class MongoDBCollection {
 
       for (let key in filter) {
         if (filter.hasOwnProperty(key) && schema.hasOwnProperty(key)) {
-          if (typeof filter[key] === schema[key]) {
+          if (schema[key]!.type.includes(typeof filter[key])) {
           } else {
             formatLog(
               `Type ${typeof filter[
@@ -223,7 +230,7 @@ class MongoDBCollection {
 
       for (let key in filter) {
         if (filter.hasOwnProperty(key) && schema.hasOwnProperty(key)) {
-          if (typeof filter[key] === schema[key]) {
+          if (schema[key]!.type.includes(typeof filter[key])) {
           } else {
             formatLog(
               `Type ${typeof filter[
