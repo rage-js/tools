@@ -1,8 +1,10 @@
+import { SchemaConfigurationType } from "../../main";
+
 /**
  * A type class to define a collection's schema.
  */
 class MongoDBSchema {
-  private schema: { [key: string]: string };
+  private schema: SchemaConfigurationType;
 
   constructor(schema: { [key: string]: any }) {
     // for (let key in schema) {
@@ -30,9 +32,9 @@ class MongoDBSchema {
 
   /**
    * Returns the schema.
-   * @returns {{ [key: string]: any }}
+   * @returns {import("../../main").SchemaConfigurationType}
    */
-  getSchema(): { [key: string]: any } {
+  getSchema(): SchemaConfigurationType {
     return this.schema;
   }
 }
