@@ -235,7 +235,7 @@ class MongoDBCollection {
             formatLog(
               `Type ${typeof filter[
                 key
-              ]} is not assignable to ${key} whose type ${schema[key]}`,
+              ]} is not assignable to ${key} whose type ${schema[key]!.type}`,
               "error",
               this.logger
             );
