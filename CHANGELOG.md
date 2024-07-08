@@ -1,5 +1,27 @@
 # @rage-js/tools
 
+## 0.2.0
+
+### Minor Changes
+
+- 70c06d1: - Feature: Schemas' formats as changed, new options like `type`, `required`, `default` are added. Example of the new schema format:
+  ```json
+  {
+    "requiredArg": { "type": "string", "required": true },
+    "optionalArg": {
+      "type": "string",
+      "required": false,
+      "default": "It's optional!"
+    },
+    "multiTypeArg": {
+      "type": ["string", "number"],
+      "required": true
+    }
+  }
+  ```
+  - Feature: Redefined the return type of `getSchema` function from `MongoDBSchmea` class.
+  - Feature: `createDocument`, `findDocument`, `deleteDocument` from `MongoDBCollection` class is updated with the new schema format.
+
 ## 0.1.1
 
 ### Patch Changes
