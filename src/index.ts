@@ -1,5 +1,5 @@
-import MongoDBCollection from "./classes/MongoDB/MongoDBCollection";
-import MongoDBSchema from "./classes/MongoDB/MongoDBSchema";
+import MongoDBCollection from "./classes/mongodb/MongoDBCollection";
+import MongoDBSchema from "./classes/mongodb/MongoDBSchema";
 import getSchema from "./util/MongoDB/getSchema";
 import formatLog from "./util/formatLog";
 import readConfigFile from "./util/readConfigFile";
@@ -21,7 +21,8 @@ class MongoDBToolKit {
   // @ts-ignore
   private excludeCollections: string[];
 
-  private applicationSetup: boolean;
+  public applicationSetup: boolean;
+
   private logger: boolean;
 
   /**
@@ -49,7 +50,7 @@ class MongoDBToolKit {
           data.databaseSpecificSettings.excludeCollections
         ) {
           this.databaseSecret = data.databaseSpecificSettings.secretKey;
-          this.localDatabasePath = path.join(process.cwd(), data.outDir);
+          this.localDatabasePath = data.outDir; // path.join(process.cwd(), data.outDir);
           this.dbs = data.databaseSpecificSettings.dbs;
           this.excludeCollections =
             data.databaseSpecificSettings.excludeCollections;
@@ -133,6 +134,7 @@ class MongoDBToolKit {
         return false;
       }
     } catch (error: any) {
+      console.log(error);
       formatLog(
         "Unexpected error occurred, when trying to create collection",
         "error",

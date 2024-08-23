@@ -1,5 +1,5 @@
 import formatLog from "../../util/formatLog";
-import MongoDBSchema from "./MongoDBSchema";
+import MongoDBSchema from "../mongodb/MongoDBSchema";
 import path from "path";
 import fsS from "fs";
 import * as fsP from "fs/promises";
