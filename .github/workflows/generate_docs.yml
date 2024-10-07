@@ -29,7 +29,8 @@ jobs:
       - name: Copy docs to rage-js-docs
         run: |
           rm -rf rage-js-docs/docs
-          cp -R docs rage-js-docs/
+          mv docs tools-docs
+          cp -R tools-docs rage-js-docs/
 
       - name: Commit and push changes to rage-js-docs
         run: |
