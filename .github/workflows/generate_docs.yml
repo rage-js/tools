@@ -44,6 +44,7 @@ jobs:
           git config --local user.name "GitHub Actions"
           git remote -v
           git branch
+          git pull origin
           git add docs
           git commit -m "Update docs"
           git push origin docs --force
