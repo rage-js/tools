@@ -1,10 +1,9 @@
 import formatLog from "../../util/formatLog";
-import MongoDBSchema from "../mongodb/MongoDBSchema";
+import MongoDBSchema from "./MongoDBSchema";
 import path from "path";
 import fsS from "fs";
 import * as fsP from "fs/promises";
 import getAllDocuments from "../../util/MongoDB/getAllDocuments";
-import { SchemaConfigurationType } from "../../main";
 
 /**
  * A type class that allows the user to perform collection related operations like finding, writing and deleting documents.
