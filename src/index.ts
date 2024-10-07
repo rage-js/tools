@@ -224,3 +224,4 @@ class MongoDBToolKit {
 }
 
 export { MongoDBToolKit, MongoDBCollection, MongoDBSchema };
+export type * from "./main";
