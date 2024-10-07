@@ -46,3 +46,6 @@ jobs:
           git add docs
           git commit -m "Update docs"
           git push origin docs --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.DOCS_BOT_ID }}
+          GITHUB_PRIVATE_KEY: ${{ secrets.DOCS_BOT_KEY }}
