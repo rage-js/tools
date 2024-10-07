@@ -31,6 +31,12 @@ jobs:
           rm -rf rage-js-docs/docs
           cp -R docs rage-js-docs/
 
+      - name: List files in rage-js-docs
+        run: |
+          ls -la
+          cd rage-js-docs
+          ls -la
+
       - name: Commit and push changes to rage-js-docs
         run: |
           cd rage-js-docs
