@@ -28,7 +28,7 @@ jobs:
 
       - name: Copy docs to rage-js-docs
         run: |
-          rm -rf rage-js-docs/docs
+          rm -rf rage-js-docs/tools-docs
           mv docs tools-docs
           cp -R tools-docs rage-js-docs/
 
