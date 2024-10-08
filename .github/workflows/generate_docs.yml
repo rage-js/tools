@@ -28,9 +28,11 @@ jobs:
 
       - name: Copy docs to rage-js-docs
         run: |
+          ls rage-js-docs
           rm -rf rage-js-docs/tools-docs
           mv docs tools-docs
           cp -R tools-docs rage-js-docs/
+          ls rage-js-docs
 
       - name: Commit and push changes to rage-js-docs
         run: |
@@ -38,6 +40,7 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "Github Actions"
           git checkout -b docs
+          git status
           git add .
           git commit -m "Update docs"
           git push origin docs --force
