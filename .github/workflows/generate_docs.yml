@@ -29,11 +29,9 @@ jobs:
 
       - name: Copy docs to rage-js-docs
         run: |
-          ls rage-js-docs
           rm -rf rage-js-docs/tools-docs
           mv docs tools-docs
           cp -R tools-docs rage-js-docs/
-          ls rage-js-docs
 
       - name: Commit and push changes to rage-js-docs
         run: |
@@ -42,7 +40,7 @@ jobs:
           git config --local user.name "Github Actions"
           git status
           git add .
-          git commit -m "Update docs"
-          git push origin docs --force
+          git commit -m "Update docs" || true
+          git push origin docs --force || true
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
