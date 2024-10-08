@@ -25,6 +25,7 @@ jobs:
           repository: rage-js/docs
           token: ${{ secrets.PAT_TOKEN }}
           path: rage-js-docs
+          ref: docs
 
       - name: Copy docs to rage-js-docs
         run: |
