@@ -14,7 +14,7 @@ interface configurationType {
 
 interface SchemaConfigurationType {
   [key: string]: {
-    type: 'string' || 'integer' || 'boolean';
+    type: "string" | "integer" | "boolean";
     required?: boolean = false;
     default?: any;
   };
