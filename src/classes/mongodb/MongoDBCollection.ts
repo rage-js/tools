@@ -6,7 +6,7 @@ import * as fsP from "fs/promises";
 import getAllDocuments from "../../util/MongoDB/getAllDocuments";
 
 /**
- * A type class that allows the user to perform collection related operations like finding, writing and deleting documents.
+ * @description A type class consisting MongoDB collection related method like finding, writing and deleting documents.
  */
 class MongoDBCollection {
   public collectionName: string;
@@ -34,6 +34,8 @@ class MongoDBCollection {
   /**
    * Creates a new document inside this collection.
    * @param {{ [key: string]: any }} arg
+   * @example
+   * createDocument({ key1: value1, key2: value2 })
    * @returns {Promise<boolean>}
    */
   async createDocument(arg: { [key: string]: any }): Promise<boolean> {
@@ -129,6 +131,9 @@ class MongoDBCollection {
   /**
    * Finds any existing document and returns it.
    * @param {{ [key: string]: any }} filter
+   * @example
+   * // Fetch every document whose's key1 value is value1
+   * findDocument({ "key1": "value1" })
    * @returns {Promise<any[] | false>}
    */
   async findDocument(filter: { [key: string]: any }): Promise<any[] | false> {
@@ -217,6 +222,9 @@ class MongoDBCollection {
    * Deletes existing documents passed as an argument.
    * @param {{[key: string]: any}} filter
    * @param {boolean} multiple
+   * @example
+   * // Delete all documents whose's key1 value is value1
+   * deleteDocument({ key1: value1 }, true)
    * @returns {Promises<any>}
    */
   async deleteDocument(
