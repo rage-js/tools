@@ -7,7 +7,7 @@ import fs from "fs/promises";
 import path from "path";
 
 /**
- * The tool kit class consisting all the tool functions
+ * @description The tool kit class consisting all the tool functions
  */
 class MongoDBToolKit {
   private configPath: string;
@@ -28,6 +28,9 @@ class MongoDBToolKit {
   /**
    * @param {string} configPath The path to the rage config file
    * @param [logger=false] Logger toggle to enable or disable logging
+   * @example
+   * // Initialize the tool kit
+   * const toolKit = new MongoDBSToolKit("./rage.config.json", true);
    */
   constructor(configPath: string, logger: boolean = false) {
     this.configPath = configPath;
@@ -37,6 +40,10 @@ class MongoDBToolKit {
 
   /**
    * Function that will setup the application configuration
+   * @example
+   * // Initialize the tool kit
+   * const toolKit = new MongoDBToolKit("./rage.config.json", true);
+   * await toolKit.setup();
    * @returns {Promise<boolean>}
    */
   async setup(): Promise<boolean> {
@@ -85,6 +92,13 @@ class MongoDBToolKit {
    * Creates a new MongoDB collection.
    * @param {string} collectionName
    * @param {string} databaseName
+   * @example
+   * // Create a new json collection (on the local database) using the tool kit
+   *
+   * const tookKit = new MongoDBToolKit("./rage.config.json", true);
+   * await toolKit.setup();
+   *
+   * await toolKit.createCollection("database1", "collection6");
    * @returns {Promise<boolean>}
    */
   async createCollection(
@@ -149,6 +163,15 @@ class MongoDBToolKit {
    * Finds the collection and returns it as MongoDBCollection object class.
    * @param {string} databaseName
    * @param {string} collectionName
+   * @example
+   * // Find a collection from the local database and return a MongoDBCollection object
+   * const toolKit = new MongoDBToolKit("./rage.config.json", true);
+   * await toolKit.setup();
+   *
+   * const collection = await toolKit.findCollection("database1", "collection3");
+   * if (collection) {
+   *   // collection.(...) <-- MongoDBCollection
+   * }
    * @returns {Promise<import("./classes/MongoDB/MongoDBCollection") | false>}
    */
   async findCollection(
